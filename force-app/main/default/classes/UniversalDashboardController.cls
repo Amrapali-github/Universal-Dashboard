@@ -34,4 +34,14 @@ public with sharing class UniversalDashboardController {
                                                 AND (StageName != 'Closed Won' OR StageName != 'Close Lost') ];
         return oppClosingThisWeek;
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Opportunity> getOpportunitiesWithBlankStartDate() {
+        
+        
+        return [SELECT Id, Name, StageName, Expected_Start_Date__c 
+                FROM Opportunity 
+                WHERE Expected_Start_Date__c = NULL 
+                AND  StageName = 'Negotiate' OR StageName = 'Closed Won' OR StageName = 'Closed Lost'];
+    }
 }
