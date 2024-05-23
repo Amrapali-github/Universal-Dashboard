@@ -34,4 +34,17 @@ public with sharing class UniversalDashboardController {
                                                 AND (StageName != 'Closed Won' OR StageName != 'Close Lost') ];
         return oppClosingThisWeek;
     }
+
+
+    @AuraEnabled(cacheable=true)
+    public static List<Opportunity> getOppsExpectedStartDateIsEarly() {
+        List<Opportunity> oppWithDateMismatch = [SELECT Id ,
+                                                        Name,
+                                                        Amount,
+                                                        CloseDate,
+                                                        Contract_Start_Month__c
+                                                FROM Opportunity 
+                                                WHERE Contract_Start_Month__c < CloseDate ];
+        return oppWithDateMismatch;
+    }
 }
